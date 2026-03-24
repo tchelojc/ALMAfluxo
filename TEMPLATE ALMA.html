@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 SINTESIA HUMANA - Demo Interativa (Tutorial)</title>
+    <!-- Chart.js para gráficos demonstrativos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cosmic-void: #000010;
+            --starlight-core: #0a001a;
+            --nebula-purple: #8A2BE2;
+            --quantum-blue: #4169E1;
+            --sun-gold: #FFD700;
+            --nova-orange: #FF8C00;
+            --earth-green: #00FF9D;
+            --spirit-color: #9D4EDD;
+            --breath-color: #00FF9D;
+            --movement-color: #4ECDC4;
+            --mind-color: #FF6B6B;
+            --nutrition-color: #FFD166;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, var(--cosmic-void), var(--starlight-core), #1a2b3a);
+            color: #e0d2b4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 20px;
+            border: 3px solid var(--nebula-purple);
+            backdrop-filter: blur(15px);
+        }
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--sun-gold), var(--nebula-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #bbdefb;
+            margin-bottom: 20px;
+        }
+        .demo-badge {
+            background: rgba(255,215,0,0.2);
+            border: 1px solid gold;
+            border-radius: 30px;
+            padding: 6px 15px;
+            display: inline-block;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .status-sistema {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+        }
+        .status-item {
+            background: rgba(30,30,46,0.7);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+        .status-label { font-size: 0.85rem; color: #90a4ae; margin-bottom: 8px; }
+        .status-valor { font-size: 1.5rem; font-weight: bold; color: var(--sun-gold); }
+        .nav-principal {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 30px 0 20px;
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn.active {
+            border-color: var(--sun-gold);
+            background: rgba(255,215,0,0.2);
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .panel {
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(57,73,171,0.5);
+            backdrop-filter: blur(8px);
+        }
+        .panel-title {
+            font-size: 1.5rem;
+            color: var(--sun-gold);
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            padding-bottom: 10px;
+        }
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .question-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+        }
+        .cosmic-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .synthetic-btn {
+            background: linear-gradient(135deg, var(--nebula-purple), var(--quantum-blue));
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .synthetic-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(138,43,226,0.3); }
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: rgba(30,30,46,0.8);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .chart-container { height: 300px; margin: 20px 0; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; }
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(10,0,26,0.5);
+            border-radius: 15px;
+        }
+        .sub-tab-btn {
+            background: rgba(65,105,225,0.2);
+            border: 1px solid rgba(65,105,225,0.4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .sub-tab-btn.active {
+            background: rgba(65,105,225,0.4);
+            border-color: var(--quantum-blue);
+            color: var(--sun-gold);
+        }
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; }
+        .demo-message {
+            background: rgba(0,255,157,0.1);
+            border-left: 4px solid var(--earth-green);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .simulation-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1 class="gradient-text">🌀 SINTESIA HUMANA</h1>
+        <p class="subtitle">Sistema Cósmico de Autoconhecimento – Demonstração Interativa</p>
+        <div class="demo-badge">✨ VERSÃO DEMONSTRATIVA – DADOS FICTÍCIOS ✨</div>
+        <div class="status-sistema">
+            <div class="status-item"><div class="status-label">MÓDULO ATIVO</div><div class="status-valor" id="demoModulo">DADOS BIOMÉTRICOS</div><div class="status-detalhe">Demo</div></div>
+            <div class="status-item"><div class="status-label">ALINHAMENTO ATUAL</div><div class="status-valor">78%</div><div class="status-detalhe">Harmonia cósmica</div></div>
+            <div class="status-item"><div class="status-label">FLUXO QUÂNTICO</div><div class="status-valor">0.732</div><div class="status-detalhe">Equilíbrio energético</div></div>
+            <div class="status-item"><div class="status-label">DADOS COLETADOS</div><div class="status-valor">100%</div><div class="status-detalhe">Perfil completo</div></div>
+        </div>
+    </header>
+
+    <div class="nav-principal">
+        <button class="nav-btn active" data-tab="biometricos">👤 DADOS BIOMÉTRICOS</button>
+        <button class="nav-btn" data-tab="humor-saude">😊 HUMOR & SAÚDE</button>
+        <button class="nav-btn" data-tab="fluxo-prazer">🌊 FLUXO QUÂNTICO</button>
+        <button class="nav-btn" data-tab="alinhamentos">🌌 ALINHAMENTOS CÓSMICOS</button>
+        <button class="nav-btn" data-tab="sistema-completo">🌀 SISTEMA COMPLETO</button>
+        <button class="nav-btn" data-tab="prompts-ia">🤖 PROMPTS IA</button>
+    </div>
+
+    <!-- ================= ABA DADOS BIOMÉTRICOS ================= -->
+    <div id="biometricos" class="tab-content active">
+        <div class="panel">
+            <h2 class="panel-title">👤 DADOS BIOMÉTRICOS - Sua Assinatura Cósmica</h2>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="identificacao">📝 Identificação</button>
+                <button class="sub-tab-btn" data-subtab="caracteristicas">🧬 Características</button>
+                <button class="sub-tab-btn" data-subtab="ancestralidade">🌍 Ancestralidade</button>
+            </div>
+            <div id="identificacao" class="sub-tab-content active">
+                <div class="question-grid">
+                    <div class="question-card"><div class="form-group"><label>Nome Completo</label><input class="form-input" value="MARIA CÓSMICA DA SILVA" placeholder="Exemplo"></div></div>
+                    <div class="question-card"><div class="form-group"><label>Data e Hora de Nascimento</label><input class="form-input" value="1990-05-15T14:30"></div></div>
+                    <div class="question-card"><div class="form-group"><label>Cor da Alma</label><input type="color" class="form-input" style="height: 40px;" value="#9B59B6"></div></div>
+                </div>
+                <button class="synthetic-btn" style="margin-top: 10px;" onclick="demoMessage('Numerologia demonstração: Número do Destino 7 (Sábio), Número da Alma 3 (Criativo).')">🎯 Calcular Numerologia (demo)</button>
+                <div class="demo-message">📊 Análise Numerológica (exemplo): Destino 7 – buscador de sabedoria; Alma 3 – expressão criativa; Personalidade 4 – construção sólida.</div>
+            </div>
+            <div id="caracteristicas" class="sub-tab-content">
+                <div class="question-grid">
+                    <div class="question-card"><label>Lateralidade Cerebral</label><select class="form-input"><option>Destro (Hemisfério Esquerdo)</option><option>Canhoto</option><option>Ambidestro</option></select></div>
+                    <div class="question-card"><label>Tipo Sanguíneo</label><select class="form-input"><option>A+</option><option>O+</option><option>B-</option></select></div>
+                    <div class="question-card"><label>Sensibilidade Energética</label><input type="range" class="cosmic-slider" min="1" max="10" value="7"></div>
+                </div>
+            </div>
+            <div id="ancestralidade" class="sub-tab-content">
+                <div class="question-grid">
+                    <div class="question-card"><label>Local de Nascimento</label><input class="form-input" value="São Paulo, Brasil"></div>
+                    <div class="question-card"><label>Linhas Ancestrais</label><select multiple class="form-input" size="4"><option>Africana (Terra)</option><option>Europeia (Ar)</option><option>Indígena (Fogo)</option></select></div>
+                </div>
+            </div>
+            <div class="simulation-controls">
+                <button class="synthetic-btn" onclick="demoMessage('Perfil cósmico salvo (demonstração).')">💾 Salvar Perfil Cósmico</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA HUMOR & SAÚDE ================= -->
+    <div id="humor-saude" class="tab-content">
+        <div class="panel">
+            <h2 class="panel-title">😊 HUMOR & SAÚDE - Monitoramento Holístico</h2>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="emocional">😊 Emocional</button>
+                <button class="sub-tab-btn" data-subtab="corporal">💢 Corporal</button>
+                <button class="sub-tab-btn" data-subtab="energetico">⚡ Energético</button>
+                <button class="sub-tab-btn" data-subtab="mental">🧠 Mental</button>
+            </div>
+            <div id="emocional" class="sub-tab-content active">
+                <div class="question-grid">
+                    <div class="question-card"><label>Humor (1-10)</label><input type="range" class="cosmic-slider" min="1" max="10" value="7"><span style="float:right">7/10</span></div>
+                    <div class="question-card"><label>Estresse</label><input type="range" min="1" max="10" value="4"><span style="float:right">4/10</span></div>
+                    <div class="question-card"><label>Motivação</label><input type="range" min="1" max="10" value="8"><span style="float:right">8/10</span></div>
+                </div>
+            </div>
+            <div id="corporal" class="sub-tab-content">
+                <div class="question-grid">
+                    <div class="question-card"><label>Energia Física</label><input type="range" value="6"><span>6/10</span></div>
+                    <div class="question-card"><label>Qualidade do Sono</label><input type="range" value="5"><span>5/10</span></div>
+                    <div class="question-card"><label>Vitalidade</label><input type="range" value="7"><span>7/10</span></div>
+                </div>
+            </div>
+            <div id="energetico" class="sub-tab-content">
+                <div class="question-grid">
+                    <div class="question-card"><label>Campo Áurico</label><input type="range" value="6"><span>6/10</span></div>
+                    <div class="question-card"><label>Conexão Espiritual</label><input type="range" value="8"><span>8/10</span></div>
+                    <div class="question-card"><label>Fluxo de Chi</label><input type="range" value="7"><span>7/10</span></div>
+                </div>
+            </div>
+            <div id="mental" class="sub-tab-content">
+                <div class="question-grid">
+                    <div class="question-card"><label>Foco</label><input type="range" value="6"><span>6/10</span></div>
+                    <div class="question-card"><label>Clareza Mental</label><input type="range" value="7"><span>7/10</span></div>
+                    <div class="question-card"><label>Criatividade</label><input type="range" value="9"><span>9/10</span></div>
+                </div>
+            </div>
+            <div class="simulation-controls">
+                <button class="synthetic-btn" onclick="demoMessage('Estado de saúde registrado (demo)')">💾 Salvar Estado Atual</button>
+                <button class="synthetic-btn" onclick="demoMessage('Relatório gerado: Níveis equilibrados. Recomendações: meditação e hidratação.')">📊 Gerar Relatório Completo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA FLUXO QUÂNTICO ================= -->
+    <div id="fluxo-prazer" class="tab-content">
+        <div class="panel">
+            <h2 class="panel-title">🌊 FLUXO MATEMÁTICO DO PRAZER QUÂNTICO</h2>
+            <div class="question-grid">
+                <div class="question-card">
+                    <h5>DEUS (0.18) – Padrão</h5>
+                    <div>1. Prazer segue sequência mental? <input type="range" min="0" max="10" value="6"><span>6</span></div>
+                    <div>2. Precisa de narrativa lógica? <input type="range" value="7"><span>7</span></div>
+                    <div>3. Repetição excita mais que novidade? <input type="range" value="5"><span>5</span></div>
+                </div>
+                <div class="question-card">
+                    <h5>JÚBILO (0.54) – Imaginação</h5>
+                    <div>1. Orgasmo apenas com imaginação? <input type="range" value="8"><span>8</span></div>
+                    <div>2. Fantasias vívidas? <input type="range" value="9"><span>9</span></div>
+                    <div>3. Prazer em ondas criativas? <input type="range" value="8"><span>8</span></div>
+                </div>
+                <div class="question-card">
+                    <h5>MARC (0.45) – Sensorial</h5>
+                    <div>1. Mão dominante essencial? <input type="range" value="7"><span>7</span></div>
+                    <div>2. Toque prevalece sobre visual? <input type="range" value="8"><span>8</span></div>
+                    <div>3. Assinatura física reconhecível? <input type="range" value="6"><span>6</span></div>
+                </div>
+                <div class="question-card">
+                    <h5>GRATIDÃO (1.80) – Integração</h5>
+                    <div>1. Conexão profunda após orgasmo? <input type="range" value="9"><span>9</span></div>
+                    <div>2. Harmonia entre físico/emoção? <input type="range" value="8"><span>8</span></div>
+                    <div>3. Agradecimento mental? <input type="range" value="7"><span>7</span></div>
+                </div>
+            </div>
+            <div class="text-center"><button class="synthetic-btn" onclick="demoMessage('Cálculo demo: DEUS 63%, JÚBILO 82%, MARC 70%, GRATIDÃO 80%. Perfil dominante: VISIONÁRIO ESTELAR.')">🔮 Calcular Meu Fluxo Quântico</button></div>
+            <div class="chart-container"><canvas id="demoRadarChart" width="400" height="300" style="max-height:250px"></canvas></div>
+            <div class="stats-summary">
+                <div class="stat-item"><div class="stat-label">DEUS</div><div class="stat-value">63%</div></div>
+                <div class="stat-item"><div class="stat-label">JÚBILO</div><div class="stat-value">82%</div></div>
+                <div class="stat-item"><div class="stat-label">MARC</div><div class="stat-value">70%</div></div>
+                <div class="stat-item"><div class="stat-label">GRATIDÃO</div><div class="stat-value">80%</div></div>
+            </div>
+            <div class="demo-message"><strong>🎯 Seu Tipo de Prazer Dominante:</strong> VISIONÁRIO ESTELAR – Imaginação é seu playground.</div>
+        </div>
+    </div>
+
+    <!-- ================= ABA ALINHAMENTOS CÓSMICOS ================= -->
+    <div id="alinhamentos" class="tab-content">
+        <div class="panel">
+            <h2 class="panel-title">🌌 SISTEMA ORBITAL - Alinhamentos Planetários em Tempo Real</h2>
+            <div class="simulation-controls">
+                <button class="synthetic-btn" onclick="demoMessage('Cálculo de alinhamentos (demo) – Aspectos ativos: Trígono entre Sol e Lua, Quadratura Marte-Júpiter.')">🚀 Calcular Alinhamentos Atuais</button>
+                <button class="synthetic-btn" onclick="demoMessage('Simulação de data: 15/04/2026 – Trânsitos favoráveis para comunicação.')">📅 Simular Data Específica</button>
+            </div>
+            <div class="orbital-demo" style="text-align:center; margin:20px 0;">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Ccircle cx='200' cy='200' r='20' fill='%23FFD700'/%3E%3Ccircle cx='120' cy='100' r='8' fill='%23A9A9A9'/%3E%3Ccircle cx='280' cy='150' r='12' fill='%23FFB6C1'/%3E%3Ccircle cx='160' cy='280' r='10' fill='%23FF6347'/%3E%3C/svg%3E" alt="Sistema orbital ilustrativo" style="width:100%; max-width:300px;">
+                <p style="font-size:0.8rem;">Representação artística dos planetas (demo)</p>
+            </div>
+            <div class="panel">
+                <h3>📊 Alinhamentos Ativos (demo)</h3>
+                <table class="alignment-table" style="width:100%; border-collapse:collapse; color:#ccc;">
+                    <thead><tr><th>Planeta</th><th>Aspeto</th><th>Influência</th><th>Intensidade</th></tr></thead>
+                    <tbody>
+                        <tr><td>☀️ Sol ☿ Mercúrio</td><td>Conjunção</td><td>Fusão</td><td>92%</td></tr>
+                        <tr><td>🌙 Lua ♃ Júpiter</td><td>Trígono</td><td>Harmonia</td><td>78%</td></tr>
+                        <tr><td>♂ Marte ♄ Saturno</td><td>Quadratura</td><td>Desafio</td><td>64%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel">
+                <h3>💫 Recomendações para Hoje</h3>
+                <ul><li>Aproveite a conjunção Sol-Mercúrio para comunicações importantes.</li><li>Encare os desafios de Marte-Saturno como oportunidades de estruturação.</li><li>Meditação ao entardecer para integrar a harmonia lunar.</li></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA SISTEMA COMPLETO ================= -->
+    <div id="sistema-completo" class="tab-content">
+        <div class="panel">
+            <h2 class="panel-title">🌀 SISTEMA COMPLETO - Integração Multidimensional</h2>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="respirar">🌬️ Respiração</button>
+                <button class="sub-tab-btn" data-subtab="alimentacao">🥗 Alimentação</button>
+                <button class="sub-tab-btn" data-subtab="movimento">💪 Movimento</button>
+                <button class="sub-tab-btn" data-subtab="meditacao">🧘 Meditação</button>
+                <button class="sub-tab-btn" data-subtab="rotina">📅 Rotina Diária</button>
+            </div>
+            <div id="respirar" class="sub-tab-content active">
+                <div class="question-card">
+                    <h4>🌬️ Protocolo de Respiração Consciente</h4>
+                    <p>Baseado em seu perfil energético: <strong>Fluxo elevado de JÚBILO</strong> – técnica recomendada: respiração alternada com visualizações criativas.</p>
+                    <div class="demo-message"><strong>⚡ Respiração Cósmica de Ativação Estelar</strong><br>Ritmo: 4-7-8-5. Mantra: "Eu sou energia pura em movimento".</div>
+                    <button class="synthetic-btn" onclick="demoMessage('Protocolo respiratório gerado (demo). Duração: 20min.')">🌀 Gerar Protocolo Personalizado</button>
+                </div>
+            </div>
+            <div id="alimentacao" class="sub-tab-content">
+                <div class="question-card">
+                    <h4>🥗 Nutrição Alinhada com o Cosmos</h4>
+                    <p>Tipo sanguíneo A+: dieta rica em vegetais, grãos integrais. Fase lunar atual: Lua Cheia – potencialize detox.</p>
+                    <button class="synthetic-btn" onclick="demoMessage('Plano alimentar: smoothie verde, quinoa, salmão. Desintoxicação suave.')">🍽️ Gerar Plano Nutricional</button>
+                </div>
+            </div>
+            <div id="movimento" class="sub-tab-content">
+                <div class="question-card">
+                    <h4>💪 Movimento Consciente</h4>
+                    <p>Lateralidade: destra. Energia disponível: 7/10. Sugestão: treino de força com foco em equilíbrio.</p>
+                    <button class="synthetic-btn" onclick="demoMessage('Rotina: 10min alongamento, 20min yoga dinâmico, 10min meditação em movimento.')">💪 Gerar Rotina de Movimento</button>
+                </div>
+            </div>
+            <div id="meditacao" class="sub-tab-content">
+                <div class="question-card">
+                    <h4>🧘 Práticas Meditativas Personalizadas</h4>
+                    <p>Tempo disponível: 20 min. Tipo: Visualização Criativa (ativo no seu perfil).</p>
+                    <button class="synthetic-btn" onclick="demoMessage('Meditação guiada: visualize luz violeta no coração, expanda para todo o corpo, 5 min de silêncio.')">🧘 Gerar Prática Meditativa</button>
+                </div>
+            </div>
+            <div id="rotina" class="sub-tab-content">
+                <div class="question-card">
+                    <h4>📅 Rotina Diária Alinhada com o Cosmos</h4>
+                    <p>Acordar: 07:00, Dormir: 23:00. Objetivo: Criatividade.</p>
+                    <button class="synthetic-btn" onclick="demoMessage('Rotina: 8h – café criativo, 10h – fluxo de trabalho profundo, 15h – pausa natureza, 19h – expressão artística.')">📅 Gerar Rotina Cósmica</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA PROMPTS IA ================= -->
+    <div id="prompts-ia" class="tab-content">
+        <div class="panel">
+            <h2 class="panel-title">🤖 PROMPTS IA - Análise Sintética Completa</h2>
+            <div class="question-grid">
+                <div class="question-card">
+                    <h4>🎯 Selecione o Tipo de Análise</h4>
+                    <select class="form-input" id="tipoPromptDemo">
+                        <option>🌌 Análise Cósmica Completa</option>
+                        <option>🪐 Análise de Alinhamentos</option>
+                        <option>🌊 Análise do Fluxo Quântico</option>
+                        <option>🌠 Leitura de Tarô Quântico</option>
+                    </select>
+                </div>
+                <div class="question-card">
+                    <h4>⚙️ Configurações da Análise</h4>
+                    <label>Profundidade: 7/10</label><input type="range" min="1" max="10" value="7"><br>
+                    <label>Estilo: Técnico e Detalhado</label>
+                </div>
+            </div>
+            <button class="synthetic-btn" onclick="demoMessage('Prompt gerado (demo): Integre seus dados cósmicos e alinhamentos atuais para uma análise profunda. Copie o texto abaixo para sua IA favorita.')">🚀 Gerar Prompt para IA</button>
+            <div class="prompt-container" style="background:rgba(30,30,46,0.8); border-radius:10px; padding:20px; margin-top:20px;">
+                <h3>📝 Prompt Gerado (exemplo)</h3>
+                <div class="prompt-content" style="background:#0a0a1a; padding:15px; border-radius:8px; font-family: monospace;">
+                    🌌 Análise Cósmica Integral – Dados do perfil: Nome: Maria Cósmica, Nascimento 15/05/1990, Fluxo quântico 0.732, Alinhamentos ativos: Conjunção Sol-Mercúrio, Trígono Lua-Júpiter. <br>
+                    🔮 Solicito uma análise multidimensional que conecte a numerologia (Destino 7) com os trânsitos planetários, oferecendo recomendações práticas para a próxima semana.
+                </div>
+                <div class="demo-message" style="margin-top:10px;">📌 Cole este prompt em ChatGPT, Claude ou Gemini para receber uma análise personalizada.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>🌀 SINTESIA HUMANA – Demonstração visual das funcionalidades. Dados fictícios, sistema real disponível mediante assinatura.</footer>
+</div>
+
+<script>
+    // Controle de abas principais
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('demoModulo').innerText = btn.innerText.trim();
+        });
+    });
+    // Controle de sub-abas
+    document.querySelectorAll('.sub-tab-btn').forEach(subbtn => {
+        subbtn.addEventListener('click', () => {
+            const parent = subbtn.closest('.tab-content');
+            const subtabId = subbtn.dataset.subtab;
+            parent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            subbtn.classList.add('active');
+            parent.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
+            parent.querySelector('#' + subtabId).classList.add('active');
+        });
+    });
+    // Gráfico radar demo (fixo)
+    const ctx = document.getElementById('demoRadarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['DEUS', 'JÚBILO', 'MARC', 'GRATIDÃO'],
+            datasets: [{ label: 'Perfil Quântico', data: [63, 82, 70, 80], backgroundColor: 'rgba(255,215,0,0.2)', borderColor: '#FFD700', pointBackgroundColor: '#FFD700' }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, scales: { r: { beginAtZero: true, max: 100 } } }
+    });
+    // Função de mensagem demo
+    function demoMessage(msg) {
+        alert("🔮 DEMO: " + msg);
+    }
+    // Ativar primeira aba por padrão
+    document.querySelectorAll('.sub-tab-btn.active').forEach(btn => btn.click());
+</script>
+</body>
+</html>
